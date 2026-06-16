@@ -1,0 +1,10 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
+FINNHUB_API_KEY = os.getenv("FINNHUB_API_KEY")
+
+GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID")
+BIGQUERY_DATASET = os.getenv("BIGQUERY_DATASET")
