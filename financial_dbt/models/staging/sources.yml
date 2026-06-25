@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: financial_raw
+    database: crested-talon-499420-r9
+    schema: financial_raw
+
+    tables:
+      - name: stock_prices
+
+      - name: company_profiles

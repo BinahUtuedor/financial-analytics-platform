@@ -1,0 +1,34 @@
+# dbt project name (must match your folder/package)
+name: 'financial_dbt'
+version: '1.0.0'
+
+# Must match the profile in ~/.dbt/profiles.yml
+profile: 'financial_dbt'
+
+# Where dbt should look for different resource types
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Clean command removes these folders
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# -----------------------------
+# MODEL CONFIGURATION
+# -----------------------------
+models:
+
+  financial_dbt:
+
+    # STAGING MODELS (light transformations, 1:1 with raw)
+    staging:
+      +materialized: view   # staging should usually be views for freshness
+
+    # MART MODELS (business-ready tables)
+    mart:
+      +materialized: table   # marts are usually tables for performance
