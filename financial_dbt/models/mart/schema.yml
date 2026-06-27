@@ -1,0 +1,57 @@
+version: 2
+
+models:
+
+  - name: fact_stock_performance
+
+    description: >
+      Daily stock performance fact table.
+
+    columns:
+
+      - name: symbol
+        tests:
+          - not_null
+
+      - name: trading_date
+        tests:
+          - not_null
+
+      - name: close_price
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+      - name: volume
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+    tests:
+
+      # High must always be greater than or equal to Low
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "high_price >= low_price"
+
+      # Open price cannot exceed the day's High
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "open_price <= high_price"
+
+      # Open price cannot be below the day's Low
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "open_price >= low_price"
+
+      # Close price cannot exceed the day's High
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "close_price <= high_price"
+
+      # Close price cannot be below the day's Low
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "close_price >= low_price"

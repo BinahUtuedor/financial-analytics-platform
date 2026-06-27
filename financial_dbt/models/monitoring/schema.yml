@@ -1,0 +1,108 @@
+version: 2
+
+models:
+
+  # ===========================================================================
+  # Monitoring Model
+  # ===========================================================================
+  - name: price_gap_detection
+
+    description: >
+      Monitoring model that detects unusually large daily price movements.
+      It compares the current closing price with the previous trading day's
+      closing price and flags movements greater than 20 percent.
+
+    columns:
+
+      - name: symbol
+
+        description: Stock ticker symbol.
+
+        tests:
+          - not_null
+
+      - name: trading_date
+
+        description: Trading date.
+
+        tests:
+          - not_null
+
+      - name: previous_close
+
+        description: Previous trading day's closing price.
+
+      - name: close_price
+
+        description: Current trading day's closing price.
+
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+      - name: pct_change
+
+        description: >
+          Percentage movement between today's close and the previous day's
+          close.
+
+      - name: monitoring_status
+
+        description: >
+          Monitoring outcome.
+          Values:
+          - OK
+          - ALERT
+
+      - name: price_gap_flag
+
+        description: >
+          Boolean flag indicating whether the daily price movement exceeded
+          the configured threshold.
+
+
+  # ===========================================================================
+  # Monitoring Model
+  # ===========================================================================
+  - name: missing_trading_days
+
+    description: >
+      Monitoring model that identifies calendar dates where no stock trading
+      data exists. This helps identify ETL failures, missing historical loads,
+      or extraction problems.
+
+    columns:
+
+      - name: trading_date
+
+        description: Calendar date with no trading data.
+
+        tests:
+          - not_null
+          - unique
+
+      - name: year
+
+        description: Calendar year.
+
+      - name: quarter
+
+        description: Calendar quarter.
+
+      - name: month
+
+        description: Calendar month.
+
+      - name: week
+
+        description: Calendar week number.
+
+      - name: weekday
+
+        description: Day of the week.
+
+      - name: is_weekend
+
+        description: >
+          TRUE when the missing date falls on a Saturday or Sunday.

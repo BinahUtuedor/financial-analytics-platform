@@ -1,0 +1,19 @@
+version: 2
+
+models:
+
+  - name: dim_date
+
+    description: Calendar dimension used for reporting.
+
+    columns:
+
+      - name: trading_date
+
+        description: Calendar date.
+
+        tests:
+
+          - not_null
+
+          - unique
